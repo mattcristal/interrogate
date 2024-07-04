@@ -5,9 +5,7 @@ import re
 import sys
 
 import pytest
-
 from interrogate import config, utils
-
 
 IS_WINDOWS = sys.platform in ("cygwin", "win32")
 
@@ -27,14 +25,14 @@ IS_WINDOWS = sys.platform in ("cygwin", "win32")
         ),
     ),
 )
-def test_parse_regex(value, exp):
+def test_parse_regex(value, exp) -> None:
     """Compile a given string into regex."""
     actual = utils.parse_regex({}, "ignore_regex", value)
     assert exp == actual
 
 
 @pytest.mark.parametrize("filename", (None, "-", "input.txt"))
-def test_smart_open(filename, mocker):
+def test_smart_open(filename, mocker) -> None:
     """Handles both opening a file and stdout in the same manner."""
     m_open = mocker.mock_open()
     mock_open = mocker.patch("interrogate.utils.open", m_open)
@@ -64,7 +62,7 @@ def test_smart_open(filename, mocker):
         (("/usr/src/app", "/src/tests"), (True,), "/"),
     ),
 )
-def test_get_common_base(files, side_effect, expected, mocker, monkeypatch):
+def test_get_common_base(files, side_effect, expected, mocker, monkeypatch) -> None:
     """Return common base of a set of files/directories, if any."""
     mock_exists = mocker.Mock(side_effect=side_effect)
     monkeypatch.setattr(utils.pathlib.Path, "exists", mock_exists)
@@ -97,7 +95,7 @@ def test_get_common_base(files, side_effect, expected, mocker, monkeypatch):
 )
 def test_get_common_base_windows(
     files, side_effect, expected, mocker, monkeypatch
-):
+) -> None:
     """Return common base of a set of files/directories, if any."""
     mock_exists = mocker.Mock(side_effect=side_effect)
     monkeypatch.setattr(utils.pathlib.Path, "exists", mock_exists)
@@ -129,7 +127,7 @@ def test_get_common_base_windows(
 )
 def test_output_formatter_should_markup(
     color_conf, envvar, hasmarkup, expected, monkeypatch
-):
+) -> None:
     """Expect markup unless configured (envvar or config) otherwise."""
     conf = config.InterrogateConfig(color=color_conf)
     formatter = utils.OutputFormatter(conf)
@@ -160,7 +158,7 @@ def test_output_formatter_should_markup(
 )
 def test_output_formatter_set_detailed_markup(
     has_markup, padded_cells, expected_cells, monkeypatch
-):
+) -> None:
     """Detailed info is marked up with expected esc codes."""
     conf = config.InterrogateConfig()
     formatter = utils.OutputFormatter(conf)
@@ -203,7 +201,7 @@ def test_output_formatter_set_detailed_markup(
 )
 def test_output_formatter_set_summary_markup(
     has_markup, padded_cells, expected_cells, monkeypatch
-):
+) -> None:
     """Summary info is marked up with expected esc codes."""
     conf = config.InterrogateConfig()
     formatter = utils.OutputFormatter(conf)
@@ -261,7 +259,7 @@ def test_output_formatter_interrogate_line_formatter(
     width,
     expected,
     monkeypatch,
-):
+) -> None:
     """Data is padded and aligned correctly to fit the terminal width."""
     conf = config.InterrogateConfig(color=False)
     formatter = utils.OutputFormatter(conf)
@@ -322,7 +320,7 @@ def test_output_formatter_interrogate_line_formatter_windows(
     width,
     expected,
     monkeypatch,
-):
+) -> None:
     """Data is padded and aligned correctly to fit the terminal width."""
     conf = config.InterrogateConfig(color=False)
     formatter = utils.OutputFormatter(conf)
@@ -337,7 +335,7 @@ def test_output_formatter_interrogate_line_formatter_windows(
 
 
 @pytest.mark.parametrize("table_type", ("detailed", "summary"))
-def test_output_formatter_get_table_formatter(table_type, mocker, monkeypatch):
+def test_output_formatter_get_table_formatter(table_type, mocker, monkeypatch) -> None:
     """The returned table formatter uses the correct table type."""
     mock_table_format = mocker.Mock()
     monkeypatch.setattr(utils.tabulate, "TableFormat", mock_table_format)
@@ -349,7 +347,7 @@ def test_output_formatter_get_table_formatter(table_type, mocker, monkeypatch):
     mock_table_format.assert_called_once()
 
 
-def test_output_formatter_get_table_formatter_raises():
+def test_output_formatter_get_table_formatter_raises() -> None:
     """Raise if received an table type other than 'detailed' or 'summary'."""
     conf = config.InterrogateConfig()
     formatter = utils.OutputFormatter(conf)
