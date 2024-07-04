@@ -5,7 +5,9 @@ import os
 import sys
 
 import pytest
+
 from interrogate import config, coverage
+
 
 HERE = os.path.abspath(os.path.join(os.path.abspath(__file__), os.path.pardir))
 SAMPLE_DIR = os.path.join(HERE, "sample")
@@ -104,7 +106,10 @@ def test_coverage_errors(capsys) -> None:
         interrogate_coverage.get_coverage()
 
     captured = capsys.readouterr()
-    assert "E: No Python or Python-like files found to interrogate in " in captured.err
+    assert (
+        "E: No Python or Python-like files found to interrogate in "
+        in captured.err
+    )
 
 
 @pytest.mark.parametrize(
@@ -122,7 +127,9 @@ def test_print_results(level, exp_fixture_file, capsys, monkeypatch) -> None:
         paths=[SAMPLE_DIR], conf=interrogate_config
     )
     results = interrogate_coverage.get_coverage()
-    interrogate_coverage.print_results(results=results, output=None, verbosity=level)
+    interrogate_coverage.print_results(
+        results=results, output=None, verbosity=level
+    )
 
     captured = capsys.readouterr()
     expected_fixture = os.path.join(FIXTURES, exp_fixture_file)
@@ -154,7 +161,9 @@ def test_print_results_omit_covered(
         paths=[SAMPLE_DIR], conf=interrogate_config
     )
     results = interrogate_coverage.get_coverage()
-    interrogate_coverage.print_results(results=results, output=None, verbosity=level)
+    interrogate_coverage.print_results(
+        results=results, output=None, verbosity=level
+    )
 
     captured = capsys.readouterr()
     expected_fixture = os.path.join(FIXTURES, exp_fixture_file)
@@ -175,7 +184,9 @@ def test_print_results_omit_none(level, capsys, monkeypatch) -> None:
         conf=interrogate_config,
     )
     results = interrogate_coverage.get_coverage()
-    interrogate_coverage.print_results(results=results, output=None, verbosity=level)
+    interrogate_coverage.print_results(
+        results=results, output=None, verbosity=level
+    )
 
     captured = capsys.readouterr()
     assert "omitted due to complete coverage" not in captured.out
@@ -190,7 +201,9 @@ def test_print_results_omit_all_summary(capsys, monkeypatch) -> None:
         paths=[os.path.join(SAMPLE_DIR, "full.py")], conf=interrogate_config
     )
     results = interrogate_coverage.get_coverage()
-    interrogate_coverage.print_results(results=results, output=None, verbosity=1)
+    interrogate_coverage.print_results(
+        results=results, output=None, verbosity=1
+    )
 
     captured = capsys.readouterr()
     exp_fixture_file = "expected_summary_skip_covered_all.txt"
@@ -212,7 +225,9 @@ def test_print_results_omit_all_detailed(capsys, monkeypatch) -> None:
         paths=[os.path.join(SAMPLE_DIR, "full.py")], conf=interrogate_config
     )
     results = interrogate_coverage.get_coverage()
-    interrogate_coverage.print_results(results=results, output=None, verbosity=2)
+    interrogate_coverage.print_results(
+        results=results, output=None, verbosity=2
+    )
 
     captured = capsys.readouterr()
     print(captured.out)
@@ -236,9 +251,13 @@ def test_print_results_ignore_module(
     conf = {"ignore_module": ignore_module, "docstring_style": "google"}
     conf = config.InterrogateConfig(**conf)
 
-    interrogate_coverage = coverage.InterrogateCoverage(paths=[SAMPLE_DIR], conf=conf)
+    interrogate_coverage = coverage.InterrogateCoverage(
+        paths=[SAMPLE_DIR], conf=conf
+    )
     results = interrogate_coverage.get_coverage()
-    interrogate_coverage.print_results(results=results, output=None, verbosity=level)
+    interrogate_coverage.print_results(
+        results=results, output=None, verbosity=level
+    )
 
     captured = capsys.readouterr()
     expected_fixture = os.path.join(FIXTURES, exp_fixture_file)
@@ -255,12 +274,18 @@ def test_print_results_single_file(capsys, monkeypatch) -> None:
     single_file = os.path.join(SAMPLE_DIR, "full.py")
     conf = {"docstring_style": "google"}
     conf = config.InterrogateConfig(**conf)
-    interrogate_coverage = coverage.InterrogateCoverage(paths=[single_file], conf=conf)
+    interrogate_coverage = coverage.InterrogateCoverage(
+        paths=[single_file], conf=conf
+    )
     results = interrogate_coverage.get_coverage()
-    interrogate_coverage.print_results(results=results, output=None, verbosity=2)
+    interrogate_coverage.print_results(
+        results=results, output=None, verbosity=2
+    )
 
     captured = capsys.readouterr()
-    expected_fixture = os.path.join(FIXTURES, "expected_detailed_single_file.txt")
+    expected_fixture = os.path.join(
+        FIXTURES, "expected_detailed_single_file.txt"
+    )
 
     if IS_WINDOWS:
         expected_fixture = os.path.join(
@@ -298,7 +323,9 @@ def test_pass_when_fail_under_exact(
     """Pass if actual coverage is exactly the `--fail-under` value.
     See issue `#114 <https://github.com/econchick/interrogate/issues/114>`_.
     """
-    monkeypatch.setattr(coverage.InterrogateResults, "perc_covered", perc_covered)
+    monkeypatch.setattr(
+        coverage.InterrogateResults, "perc_covered", perc_covered
+    )
 
     interrogate_config = config.InterrogateConfig(fail_under=fail_under)
     interrogate_coverage = coverage.InterrogateCoverage(

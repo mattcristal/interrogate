@@ -7,6 +7,7 @@ import pathlib
 import click
 import pytest
 
+
 try:
     import tomllib
 except ImportError:
@@ -216,7 +217,9 @@ def test_read_config_file_raises(mocker, monkeypatch) -> None:
     os_error = OSError("os error")
     mock_parse_pyproject_toml = mocker.Mock()
     mock_parse_pyproject_toml.side_effect = (toml_error, os_error)
-    monkeypatch.setattr(config, "parse_pyproject_toml", mock_parse_pyproject_toml)
+    monkeypatch.setattr(
+        config, "parse_pyproject_toml", mock_parse_pyproject_toml
+    )
     cfg_error = configparser.ParsingError("cfg parsing error")
     mock_parse_setup_cfg = mocker.Mock()
     mock_parse_setup_cfg.side_effect = (cfg_error,)

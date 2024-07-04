@@ -5,7 +5,9 @@ import re
 import sys
 
 import pytest
+
 from interrogate import config, utils
+
 
 IS_WINDOWS = sys.platform in ("cygwin", "win32")
 
@@ -62,7 +64,9 @@ def test_smart_open(filename, mocker) -> None:
         (("/usr/src/app", "/src/tests"), (True,), "/"),
     ),
 )
-def test_get_common_base(files, side_effect, expected, mocker, monkeypatch) -> None:
+def test_get_common_base(
+    files, side_effect, expected, mocker, monkeypatch
+) -> None:
     """Return common base of a set of files/directories, if any."""
     mock_exists = mocker.Mock(side_effect=side_effect)
     monkeypatch.setattr(utils.pathlib.Path, "exists", mock_exists)
@@ -335,7 +339,9 @@ def test_output_formatter_interrogate_line_formatter_windows(
 
 
 @pytest.mark.parametrize("table_type", ("detailed", "summary"))
-def test_output_formatter_get_table_formatter(table_type, mocker, monkeypatch) -> None:
+def test_output_formatter_get_table_formatter(
+    table_type, mocker, monkeypatch
+) -> None:
     """The returned table formatter uses the correct table type."""
     mock_table_format = mocker.Mock()
     monkeypatch.setattr(utils.tabulate, "TableFormat", mock_table_format)

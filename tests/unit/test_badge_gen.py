@@ -5,7 +5,9 @@ import os
 import sys
 
 import pytest
+
 from interrogate import badge_gen
+
 
 HERE = os.path.abspath(os.path.join(os.path.abspath(__file__), os.path.pardir))
 FIXTURES = os.path.join(HERE, "fixtures")
@@ -21,7 +23,9 @@ IS_WINDOWS = sys.platform in ("cygwin", "win32")
         ("png", "fixtures/my_badge.png", "fixtures/my_badge.tmp.svg"),
     ),
 )
-def test_save_badge(out_format, out_file, exp_called_with, mocker, monkeypatch) -> None:
+def test_save_badge(
+    out_format, out_file, exp_called_with, mocker, monkeypatch
+) -> None:
     """Badge is saved in the expected location."""
     mock_cairosvg = mocker.Mock()
     monkeypatch.setattr(badge_gen, "cairosvg", mock_cairosvg)
@@ -175,7 +179,9 @@ def test_create(
         actual = badge_gen.create(str(output), mock_result, output_style=style)
 
     mock_result = mocker.Mock(perc_covered=result)
-    actual = badge_gen.create(str(output), mock_result, out_format, output_style=style)
+    actual = badge_gen.create(
+        str(output), mock_result, out_format, output_style=style
+    )
 
     flag = "rb" if out_format == "png" else "r"
     with open(actual, flag) as f:

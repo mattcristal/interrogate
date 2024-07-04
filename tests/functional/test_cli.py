@@ -5,8 +5,11 @@ import os
 import sys
 
 import pytest
+
 from click import testing
+
 from interrogate import cli, config
+
 
 HERE = os.path.abspath(os.path.join(os.path.abspath(__file__), os.path.pardir))
 SAMPLE_DIR = os.path.join(HERE, "sample")
